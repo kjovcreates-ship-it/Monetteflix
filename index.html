@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreamVault</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">Monette<span>Flix</span></div>
+    <div class="header-tabs">
+      <button class="tab-btn active" data-tab="all">All</button>
+      <button class="tab-btn" data-tab="movie">Movies</button>
+      <button class="tab-btn" data-tab="tv">TV Shows</button>
+    </div>
+  </header>
+
+  <!-- HERO / SEARCH -->
+  <div class="hero">
+    <h1>Watch <em>Anything.</em><br>Free. Now.</h1>
+    <p>Search millions of movies and TV shows, then stream instantly.</p>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search movies or TV shows…" autocomplete="off" />
+      <button id="searchBtn">Search</button>
+    </div>
+  </div>
+
+  <!-- PLAYER -->
+  <div id="player-section">
+    <div class="player-header">
+      <div>
+        <div class="player-title" id="playerTitle">—</div>
+        <div class="player-meta" id="playerMeta"></div>
+      </div>
+      <button class="close-player" id="closePlayer">✕ Close</button>
+    </div>
+    <div class="player-frame-wrap">
+      <iframe id="playerFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
+    </div>
+    <div class="episode-controls" id="episodeControls">
+      <div class="ep-row">
+        <label>Season</label>
+        <select id="seasonSelect"></select>
+        <label>Episode</label>
+        <select id="episodeSelect"></select>
+        <div class="ep-nav">
+          <button id="prevEp">← Prev</button>
+          <button id="nextEp">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH RESULTS -->
+  <div id="results-section">
+    <div class="section-label" id="resultsLabel">Results</div>
+    <div class="grid" id="resultsGrid"></div>
+  </div>
+
+  <!-- TRENDING -->
+  <div id="trending-section">
+    <div class="section-label">Trending <span>right now</span></div>
+    <div class="grid" id="trendingGrid"><div class="spinner"></div></div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
