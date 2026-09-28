@@ -21,11 +21,11 @@ const Player = {
   // ==========================================
 
   getMovieURL(id) {
-    return `${CONFIG.CINESRC/embed/movie/${id}`;
+    return `${https://cinesrc.st/embed/movie/{tmdb_id}`;
   },
 
   getTVURL(id, season, episode) {
-    return `${CONFIG.CINESRC}/embed/tv/${id}?s=${season}&e=${episode}`;
+    return `${https://cinesrc.st/embed/tv/{tmdb_id}?s={season}&e={episode}`;
   },
 
 
