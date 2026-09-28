@@ -1,217 +1,138 @@
-// =========================================
-// PLAYER
-// =========================================
+// ── PLAYER ──
+// Controls the video iframe and TV episode selector
 
 const Player = {
-
   currentItem: null,
-
   tvSeasons: [],
 
-
   elements: {
-
-    section: () =>
-      document.getElementById('player-section'),
-
-    frame: () =>
-      document.getElementById('playerFrame'),
-
-    title: () =>
-      document.getElementById('playerTitle'),
-
-    meta: () =>
-      document.getElementById('playerMeta'),
-
-    controls: () =>
-      document.getElementById('episodeControls'),
-
-    seasonSel: () =>
-      document.getElementById('seasonSelect'),
-
-    episodeSel: () =>
-      document.getElementById('episodeSelect'),
-
-    prevButton: () =>
-      document.getElementById('prevEp'),
-
-    nextButton: () =>
-      document.getElementById('nextEp'),
-
+    section: () => document.getElementById('player-section'),
+    frame: () => document.getElementById('playerFrame'),
+    title: () => document.getElementById('playerTitle'),
+    meta: () => document.getElementById('playerMeta'),
+    controls: () => document.getElementById('episodeControls'),
+    seasonSel: () => document.getElementById('seasonSelect'),
+    episodeSel: () => document.getElementById('episodeSelect'),
   },
 
 
-  // -----------------------------------------
+  // ==========================================
+  // PROVIDER URLS
+  // ==========================================
+
+  getMovieURL(id) {
+    return `${CONFIG.CINESRC/embed/movie/${id}`;
+  },
+
+  getTVURL(id, season, episode) {
+    return `${CONFIG.CINESRC}/embed/tv/${id}?s=${season}&e=${episode}`;
+  },
+
+
+  // ==========================================
   // OPEN PLAYER
-  // -----------------------------------------
+  // ==========================================
 
-  async open(
-    id,
-    type,
-    title,
-    year
-  ) {
-
+  async open(id, type, title, year) {
     this.currentItem = {
       id,
       type,
       title,
-      year,
+      year
     };
 
-
-    this.elements.title().textContent =
-      title;
-
+    this.elements.title().textContent = title;
 
     this.elements.meta().textContent =
-      [
-        type === 'tv'
-          ? 'TV Series'
-          : 'Movie',
+      `${type === 'tv' ? 'TV Series' : 'Movie'} · ${year || 'Unknown'}`;
 
-        year || null,
-
-      ]
-        .filter(Boolean)
-        .join(' • ');
+    this.elements.section().style.display = 'block';
 
 
-    this.elements.section().style.display =
-      'block';
-
-
+    // MOVIE
     if (type === 'movie') {
-
-      this.elements.controls()
-        .classList.remove('visible');
-
+      this.elements.controls().classList.remove('visible');
 
       this.elements.frame().src =
-        `${CONFIG.VIDKING}/embed/movie/${id}`;
-
+        this.getMovieURL(id);
     }
 
+
+    // TV SHOW
     else {
-
-      this.elements.controls()
-        .classList.add('visible');
-
+      this.elements.controls().classList.add('visible');
 
       await this.loadSeasons(id);
 
-
       this.updateFrame();
-
     }
 
 
     this.elements.section().scrollIntoView({
       behavior: 'smooth',
-      block: 'start',
+      block: 'start'
     });
-
   },
 
 
-  // -----------------------------------------
-  // CLOSE
-  // -----------------------------------------
+  // ==========================================
+  // CLOSE PLAYER
+  // ==========================================
 
   close() {
-
-    this.elements.section().style.display =
-      'none';
-
+    this.elements.section().style.display = 'none';
 
     this.elements.frame().src = '';
 
-
-    this.elements.controls()
-      .classList.remove('visible');
-
+    this.elements.controls().classList.remove('visible');
 
     this.currentItem = null;
-
-
-    this.tvSeasons = [];
-
   },
 
 
-  // -----------------------------------------
-  // LOAD TV SEASONS
-  // -----------------------------------------
+  // ==========================================
+  // LOAD TV SEASONS FROM TMDB
+  // ==========================================
 
   async loadSeasons(id) {
+    const seasonSel = this.elements.seasonSel();
+    const episodeSel = this.elements.episodeSel();
 
-    const seasonSelect =
-      this.elements.seasonSel();
-
-
-    const episodeSelect =
-      this.elements.episodeSel();
-
-
-    seasonSelect.innerHTML =
+    seasonSel.innerHTML =
       '<option>Loading...</option>';
 
-
-    episodeSelect.innerHTML =
+    episodeSel.innerHTML =
       '<option>—</option>';
 
-
     try {
+      const data = await API.tvDetails(id);
 
-      const data =
-        await API.tvDetails(id);
+      this.tvSeasons = data.seasons.filter(
+        season =>
+          season.season_number > 0 &&
+          season.episode_count > 0
+      );
 
+      seasonSel.innerHTML = this.tvSeasons
+        .map(
+          season => `
+            <option
+              value="${season.season_number}"
+              data-eps="${season.episode_count}"
+            >
+              Season ${season.season_number}
+            </option>
+          `
+        )
+        .join('');
 
-      this.tvSeasons =
-        (data.seasons || [])
-          .filter(
-            season =>
-              season.season_number > 0 &&
-              season.episode_count > 0
-          );
-
-
-      if (!this.tvSeasons.length) {
-
-        throw new Error(
-          'No seasons available'
-        );
-
-      }
-
-
-      seasonSelect.innerHTML =
-        this.tvSeasons
-          .map(
-            season => `
-
-              <option
-                value="${season.season_number}"
-                data-eps="${season.episode_count}"
-              >
-                Season ${season.season_number}
-              </option>
-
-            `
-          )
-          .join('');
-
-    }
-
-    catch (error) {
-
+    } catch (error) {
       console.error(
-        'Unable to load seasons:',
+        'Could not load TV seasons:',
         error
       );
 
-
-      seasonSelect.innerHTML = `
+      seasonSel.innerHTML = `
         <option
           value="1"
           data-eps="20"
@@ -219,257 +140,146 @@ const Player = {
           Season 1
         </option>
       `;
-
     }
 
-
     this.updateEpisodeList();
-
   },
 
 
-  // -----------------------------------------
-  // UPDATE EPISODES
-  // -----------------------------------------
+  // ==========================================
+  // CREATE EPISODE LIST
+  // ==========================================
 
   updateEpisodeList() {
-
-    const seasonSelect =
+    const seasonSel =
       this.elements.seasonSel();
 
-
-    const selectedOption =
-      seasonSelect.options[
-        seasonSelect.selectedIndex
+    const selected =
+      seasonSel.options[
+        seasonSel.selectedIndex
       ];
 
-
     const episodeCount =
-      Number(
-        selectedOption?.dataset?.eps
-      ) || 1;
+      parseInt(selected?.dataset?.eps) || 1;
 
-
-    const episodeSelect =
+    const episodeSel =
       this.elements.episodeSel();
 
-
-    episodeSelect.innerHTML =
+    episodeSel.innerHTML =
       Array.from(
-        {
-          length: episodeCount,
-        },
-
+        { length: episodeCount },
         (_, index) => `
-
           <option value="${index + 1}">
             Episode ${index + 1}
           </option>
-
         `
       ).join('');
-
-
-    this.updateNavigationButtons();
-
   },
 
 
-  // -----------------------------------------
-  // UPDATE VIDEO
-  // -----------------------------------------
+  // ==========================================
+  // UPDATE TV PLAYER
+  // ==========================================
 
   updateFrame() {
-
-    if (!this.currentItem) {
-      return;
-    }
-
-
-    if (
-      this.currentItem.type ===
-      'movie'
-    ) {
-
-      this.elements.frame().src =
-        `${CONFIG.VIDKING}/embed/movie/${this.currentItem.id}`;
-
-      return;
-
-    }
-
+    if (!this.currentItem) return;
 
     const season =
       this.elements.seasonSel().value || 1;
 
-
     const episode =
       this.elements.episodeSel().value || 1;
 
-
     this.elements.frame().src =
-      `${CONFIG.VIDKING}/embed/tv/${this.currentItem.id}/${season}/${episode}`;
-
-
-    this.updateNavigationButtons();
-
+      this.getTVURL(
+        this.currentItem.id,
+        season,
+        episode
+      );
   },
 
 
-  // -----------------------------------------
+  // ==========================================
   // PREVIOUS EPISODE
-  // -----------------------------------------
+  // ==========================================
 
   prevEpisode() {
-
-    const episodeSelect =
+    const episodes =
       this.elements.episodeSel();
 
-
-    const seasonSelect =
+    const seasons =
       this.elements.seasonSel();
 
+    if (episodes.selectedIndex > 0) {
+      episodes.selectedIndex--;
 
-    if (
-      episodeSelect.selectedIndex > 0
-    ) {
+      this.updateFrame();
 
-      episodeSelect.selectedIndex--;
-
+      return;
     }
 
-    else if (
-      seasonSelect.selectedIndex > 0
-    ) {
 
-      seasonSelect.selectedIndex--;
-
+    if (seasons.selectedIndex > 0) {
+      seasons.selectedIndex--;
 
       this.updateEpisodeList();
 
-
-      const newEpisodeSelect =
+      const newEpisodes =
         this.elements.episodeSel();
 
+      newEpisodes.selectedIndex =
+        newEpisodes.options.length - 1;
 
-      newEpisodeSelect.selectedIndex =
-        newEpisodeSelect.options.length - 1;
-
+      this.updateFrame();
     }
-
-    else {
-
-      return;
-
-    }
-
-
-    this.updateFrame();
-
   },
 
 
-  // -----------------------------------------
+  // ==========================================
   // NEXT EPISODE
-  // -----------------------------------------
+  // ==========================================
 
   nextEpisode() {
-
-    const episodeSelect =
+    const episodes =
       this.elements.episodeSel();
 
-
-    const seasonSelect =
+    const seasons =
       this.elements.seasonSel();
 
 
     if (
-      episodeSelect.selectedIndex <
-      episodeSelect.options.length - 1
+      episodes.selectedIndex <
+      episodes.options.length - 1
     ) {
+      episodes.selectedIndex++;
 
-      episodeSelect.selectedIndex++;
+      this.updateFrame();
 
+      return;
     }
 
-    else if (
-      seasonSelect.selectedIndex <
-      seasonSelect.options.length - 1
+
+    if (
+      seasons.selectedIndex <
+      seasons.options.length - 1
     ) {
-
-      seasonSelect.selectedIndex++;
-
+      seasons.selectedIndex++;
 
       this.updateEpisodeList();
-
 
       this.elements.episodeSel()
         .selectedIndex = 0;
 
+      this.updateFrame();
     }
-
-    else {
-
-      return;
-
-    }
-
-
-    this.updateFrame();
-
   },
 
 
-  // -----------------------------------------
-  // NAV BUTTON STATE
-  // -----------------------------------------
-
-  updateNavigationButtons() {
-
-    const seasonSelect =
-      this.elements.seasonSel();
-
-
-    const episodeSelect =
-      this.elements.episodeSel();
-
-
-    if (
-      !seasonSelect.options.length ||
-      !episodeSelect.options.length
-    ) {
-      return;
-    }
-
-
-    const firstEpisode =
-      seasonSelect.selectedIndex === 0 &&
-      episodeSelect.selectedIndex === 0;
-
-
-    const lastEpisode =
-      seasonSelect.selectedIndex ===
-        seasonSelect.options.length - 1 &&
-      episodeSelect.selectedIndex ===
-        episodeSelect.options.length - 1;
-
-
-    this.elements.prevButton().disabled =
-      firstEpisode;
-
-
-    this.elements.nextButton().disabled =
-      lastEpisode;
-
-  },
-
-
-  // -----------------------------------------
+  // ==========================================
   // EVENTS
-  // -----------------------------------------
+  // ==========================================
 
   bindEvents() {
-
     document
       .getElementById('closePlayer')
       .addEventListener(
@@ -483,11 +293,8 @@ const Player = {
       .addEventListener(
         'change',
         () => {
-
           this.updateEpisodeList();
-
           this.updateFrame();
-
         }
       );
 
@@ -514,7 +321,5 @@ const Player = {
         'click',
         () => this.nextEpisode()
       );
-
-  },
-
+  }
 };
