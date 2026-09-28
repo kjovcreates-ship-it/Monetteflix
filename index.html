@@ -1,86 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Monetteflix</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08080c">
 
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-3KSWP404TP"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <title>MonetteFlix</title>
 
-  gtag('config', 'G-3KSWP404TP');
-</script>
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3KSWP404TP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-3KSWP404TP');
+  </script>
 </head>
+
 <body>
 
   <!-- HEADER -->
-  <header>
-    <div class="logo">Monette<span>Flix</span></div>
-    <div class="header-tabs">
+  <header class="site-header">
+    <a href="#" class="logo" id="homeLogo" aria-label="MonetteFlix home">
+      Monette<span>Flix</span>
+    </a>
+
+    <nav class="header-tabs" aria-label="Content filters">
       <button class="tab-btn active" data-tab="all">All</button>
       <button class="tab-btn" data-tab="movie">Movies</button>
       <button class="tab-btn" data-tab="tv">TV Shows</button>
-    </div>
+    </nav>
   </header>
 
-  <!-- HERO / SEARCH -->
-  <div class="hero">
-    <h1>Watch <em>Anything.</em><br>Free. Now.</h1>
-    <p>Search millions of movies and TV shows, then stream instantly.</p>
-    <div class="search-wrap">
-      <input type="text" id="searchInput" placeholder="Search movies or TV shows…" autocomplete="off" />
-      <button id="searchBtn">Search</button>
-    </div>
-  </div>
 
-  <!-- PLAYER -->
-  <div id="player-section">
-    <div class="player-header">
-      <div>
-        <div class="player-title" id="playerTitle">—</div>
-        <div class="player-meta" id="playerMeta"></div>
-      </div>
-      <button class="close-player" id="closePlayer">✕ Close</button>
-    </div>
-    <div class="player-frame-wrap">
-      <iframe id="playerFrame" src="" allowfullscreen allow="autoplay; encrypted-media; fullscreen"></iframe>
-    </div>
-    <div class="episode-controls" id="episodeControls">
-      <div class="ep-row">
-        <label>Season</label>
-        <select id="seasonSelect"></select>
-        <label>Episode</label>
-        <select id="episodeSelect"></select>
-        <div class="ep-nav">
-          <button id="prevEp">← Prev</button>
-          <button id="nextEp">Next →</button>
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+
+      <div class="hero-glow hero-glow-one"></div>
+      <div class="hero-glow hero-glow-two"></div>
+
+      <div class="hero-content">
+
+        <div class="hero-eyebrow">
+          Movies & TV Shows
         </div>
+
+        <h1>
+          Find something<br>
+          <em>worth watching.</em>
+        </h1>
+
+        <p>
+          Search movies and TV shows and start watching in seconds.
+        </p>
+
+        <div class="search-wrap">
+
+          <div class="search-input-wrap">
+
+            <svg
+              class="search-icon"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M21 21l-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+
+            <input
+              type="search"
+              id="searchInput"
+              placeholder="Search movies or TV shows..."
+              autocomplete="off"
+              aria-label="Search movies or TV shows"
+            >
+
+            <button
+              id="clearSearch"
+              class="clear-search"
+              aria-label="Clear search"
+              type="button"
+            >
+              &times;
+            </button>
+
+          </div>
+
+          <button id="searchBtn" type="button">
+            Search
+          </button>
+
+        </div>
+
       </div>
+    </section>
+
+
+    <!-- PLAYER -->
+    <section id="player-section">
+
+      <div class="player-header">
+
+        <div class="player-heading">
+
+          <span class="now-watching">
+            Now Watching
+          </span>
+
+          <div class="player-title" id="playerTitle">
+            —
+          </div>
+
+          <div class="player-meta" id="playerMeta"></div>
+
+        </div>
+
+        <button
+          class="close-player"
+          id="closePlayer"
+          type="button"
+        >
+          <span aria-hidden="true">&times;</span>
+          Close
+        </button>
+
+      </div>
+
+
+      <div class="player-frame-wrap">
+
+        <iframe
+          id="playerFrame"
+          src=""
+          title="MonetteFlix video player"
+          allowfullscreen
+          allow="autoplay; encrypted-media; fullscreen"
+        ></iframe>
+
+      </div>
+
+
+      <!-- EPISODE CONTROLS -->
+      <div class="episode-controls" id="episodeControls">
+
+        <div class="ep-row">
+
+          <div class="selector-group">
+            <label for="seasonSelect">Season</label>
+            <select id="seasonSelect"></select>
+          </div>
+
+          <div class="selector-group">
+            <label for="episodeSelect">Episode</label>
+            <select id="episodeSelect"></select>
+          </div>
+
+          <div class="ep-nav">
+
+            <button id="prevEp" type="button">
+              <span aria-hidden="true">←</span>
+              Previous
+            </button>
+
+            <button id="nextEp" type="button">
+              Next
+              <span aria-hidden="true">→</span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SEARCH RESULTS -->
+    <section id="results-section">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="section-eyebrow">Search</span>
+          <h2 id="resultsLabel">Results</h2>
+        </div>
+
+      </div>
+
+      <div class="grid" id="resultsGrid"></div>
+
+    </section>
+
+
+    <!-- TRENDING -->
+    <section id="trending-section">
+
+      <div class="section-heading">
+
+        <div>
+          <span class="section-eyebrow">Discover</span>
+          <h2>
+            Trending <span>right now</span>
+          </h2>
+        </div>
+
+      </div>
+
+      <div class="grid" id="trendingGrid">
+        <div class="spinner"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer>
+
+    <div class="footer-logo">
+      Monette<span>Flix</span>
     </div>
-  </div>
 
-  <!-- SEARCH RESULTS -->
-  <div id="results-section">
-    <div class="section-label" id="resultsLabel">Results</div>
-    <div class="grid" id="resultsGrid"></div>
-  </div>
+    <p>
+      Developed by
+      <span class="footer-name">kjov</span>
+    </p>
 
-  <!-- TRENDING -->
-  <div id="trending-section">
-    <div class="section-label">Trending <span>right now</span></div>
-    <div class="grid" id="trendingGrid"><div class="spinner"></div></div>
-  </div>
-<!-- FOOTER -->
-<footer>
-  <p>Developed by <span class="footer-name">kjov</span></p>
-</footer>
+  </footer>
+
+
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/player.js"></script>
