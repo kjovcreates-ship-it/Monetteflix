@@ -58,15 +58,15 @@
 
       <div class="hero-content">
 
-        <div class="hero-eyebrow"><span class="live-dot"></span> YOUR PRIVATE MOVIE NIGHT</div>
+        <div class="hero-eyebrow"><span class="live-dot"></span> MOVIES & TV SHOWS</div>
 
         <h1>
-          Tonight looks<br>
-          <em>like a movie.</em>
+          Find your next<br>
+          <em>favorite watch.</em>
         </h1>
 
         <p>
-          A little cinema, made just for us. Find your next favorite story and get comfortable.
+          Explore movies and TV shows. Search, discover, and start watching.
         </p>
 
         <div class="search-wrap">
@@ -112,13 +112,28 @@
 
         </div>
 
-        <div class="hero-note"><span class="hero-note-line"></span> THE BEST STORIES ARE THE ONES WE SHARE <span class="hero-note-line"></span></div>
+        <div class="hero-note"><span class="hero-note-line"></span> EXPLORE • DISCOVER • WATCH <span class="hero-note-line"></span></div>
       </div>
       <div class="hero-feature" id="heroFeature" aria-label="Featured title">
-        <div class="feature-placeholder"><span>MONETTE<span class="feature-red">FLIX</span></span><small>OUR LITTLE CINEMA</small></div>
+        <div class="feature-placeholder"><span>MONETTE<span class="feature-red">FLIX</span></span><small>MOVIES & TV SHOWS</small></div>
       </div>
     </section>
 
+
+    <!-- GENRE DISCOVERY -->
+    <section id="genres-section" class="discovery-section">
+      <div class="section-heading"><div><span class="section-eyebrow">BROWSE BY MOOD</span><h2>Explore genres</h2></div></div>
+      <div class="genre-chips" id="genreChips" aria-label="Filter by genre"></div>
+      <div class="genre-results-head"><h3 id="genreResultsTitle">Popular picks</h3><button id="clearGenre" type="button" hidden>Clear genre ×</button></div>
+      <div class="grid" id="genreGrid" aria-live="polite"></div>
+      <button class="load-more" id="genreMore" type="button" hidden>Load more</button>
+    </section>
+
+    <!-- CURATED ROWS -->
+    <section class="discovery-section" id="curated-section">
+      <div class="section-heading"><div><span class="section-eyebrow">HANDPICKED FOR EXPLORING</span><h2>Browse collections</h2></div></div>
+      <div id="curatedRows"></div>
+    </section>
 
     <!-- PLAYER -->
     <section id="player-section">
@@ -223,7 +238,7 @@
       <div class="section-heading">
 
         <div>
-          <span class="section-eyebrow">HANDPICKED BY THE UNIVERSE</span>
+          <span class="section-eyebrow">POPULAR PICKS</span>
           <h2>
             Trending <span>right now</span>
           </h2>
