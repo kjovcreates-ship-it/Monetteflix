@@ -189,6 +189,7 @@ const App = {
         grid,
         results.slice(0, 20)
       );
+      this.renderFeatured(results);
 
     }
 
@@ -209,6 +210,30 @@ const App = {
 
   },
 
+
+  // -----------------------------------------
+  // FEATURED TITLE
+  // -----------------------------------------
+  renderFeatured(items) {
+    const el = document.getElementById('heroFeature');
+    if (!el) return;
+    const item = items.find(i => i.backdrop_path && (i.title || i.name));
+    if (!item) return;
+    const title = item.title || item.name;
+    const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+    const type = item.media_type || (item.title ? 'movie' : 'tv');
+    el.innerHTML = `
+      <div class="feature-image" style="background-image:linear-gradient(90deg,rgba(9,9,13,.12),rgba(9,9,13,.05)),url('https://image.tmdb.org/t/p/w1280${item.backdrop_path}')"></div>
+      <div class="feature-info">
+        <span class="feature-kicker">✦ IN THE SPOTLIGHT</span>
+        <h2>${UI.escapeHTML(title)}</h2>
+        <p>${year || 'Featured'} <span>·</span> ${type === 'tv' ? 'TV Series' : 'Movie'}</p>
+        <button class="feature-play" type="button">▶ &nbsp; Watch now</button>
+      </div>`;
+    el.querySelector('.feature-play').addEventListener('click', () =>
+      Player.open(item.id, type, title, year)
+    );
+  },
 
   // -----------------------------------------
   // CHANGE TAB
