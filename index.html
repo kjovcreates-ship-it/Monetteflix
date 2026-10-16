@@ -16,6 +16,7 @@
   >
 
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/redesign.css">
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-3KSWP404TP"></script>
@@ -48,6 +49,7 @@
 
 
   <main>
+    <div class="ambient-light" aria-hidden="true"></div>
 
     <!-- HERO -->
     <section class="hero">
@@ -57,17 +59,15 @@
 
       <div class="hero-content">
 
-        <div class="hero-eyebrow">
-          Movies & TV Shows
-        </div>
+        <div class="hero-eyebrow"><span class="live-dot"></span> YOUR PRIVATE MOVIE NIGHT</div>
 
         <h1>
-          Find something<br>
-          <em>worth watching.</em>
+          Tonight looks<br>
+          <em>like a movie.</em>
         </h1>
 
         <p>
-          Search movies and TV shows and start watching in seconds.
+          A little cinema, made just for us. Find your next favorite story and get comfortable.
         </p>
 
         <div class="search-wrap">
@@ -113,6 +113,10 @@
 
         </div>
 
+        <div class="hero-note"><span class="hero-note-line"></span> THE BEST STORIES ARE THE ONES WE SHARE <span class="hero-note-line"></span></div>
+      </div>
+      <div class="hero-feature" id="heroFeature" aria-label="Featured title">
+        <div class="feature-placeholder"><span>MONETTE<span class="feature-red">FLIX</span></span><small>OUR LITTLE CINEMA</small></div>
       </div>
     </section>
 
@@ -203,7 +207,7 @@
       <div class="section-heading">
 
         <div>
-          <span class="section-eyebrow">Search</span>
+          <span class="section-eyebrow">YOUR SEARCH</span>
           <h2 id="resultsLabel">Results</h2>
         </div>
 
@@ -220,7 +224,7 @@
       <div class="section-heading">
 
         <div>
-          <span class="section-eyebrow">Discover</span>
+          <span class="section-eyebrow">HANDPICKED BY THE UNIVERSE</span>
           <h2>
             Trending <span>right now</span>
           </h2>
@@ -246,7 +250,7 @@
 
     <p>
       Developed by
-      <span class="footer-name">kjov</span>
+      <a class="footer-name" href="https://kjovcreates.vercel.app/" target="_blank" rel="noopener noreferrer">kjov <span aria-hidden="true">↗</span></a>
     </p>
 
   </footer>
