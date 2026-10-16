@@ -95,6 +95,14 @@ const API = {
   },
 
 
+  // TMDB discover endpoints; movie and TV genre IDs can differ.
+  async discover(type, genreId, page = 1) {
+    const params = new URLSearchParams({sort_by:'popularity.desc',page:String(page),include_adult:'false'});
+    if (genreId) params.set('with_genres', String(genreId));
+    const data = await this.fetch(`/discover/${type}?${params.toString()}`);
+    return { ...data, results:(data.results || []).map(item => ({...item,media_type:type})) };
+  },
+
   // -----------------------------------------
   // TV DETAILS
   // -----------------------------------------

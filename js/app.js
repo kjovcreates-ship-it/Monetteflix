@@ -264,6 +264,7 @@ const App = {
 
 
     this.loadTrending();
+    this.loadGenres();
 
 
     const query =
@@ -344,6 +345,86 @@ const App = {
 
   },
 
+
+  genreList: [
+    {name:'All genres',movie:null,tv:null},
+    {name:'Action',movie:28,tv:10759},
+    {name:'Comedy',movie:35,tv:35},
+    {name:'Horror',movie:27,tv:null},
+    {name:'Romance',movie:10749,tv:null},
+    {name:'Sci-Fi',movie:878,tv:10765},
+    {name:'Thriller',movie:53,tv:null},
+    {name:'Drama',movie:18,tv:18},
+    {name:'Animation',movie:16,tv:16},
+    {name:'Documentary',movie:99,tv:99},
+    {name:'Mystery',movie:9648,tv:9648},
+    {name:'Crime',movie:80,tv:80}
+  ],
+  selectedGenre: 'All genres',
+  genrePage: 1,
+  genreRequest: 0,
+
+  async genreData(name, page = 1) {
+    const genre = this.genreList.find(g => g.name === name) || this.genreList[0];
+    const types = this.activeTab === 'all' ? ['movie','tv'] : [this.activeTab];
+    const usable = types.filter(type => genre[type] !== null || name === 'All genres');
+    const responses = await Promise.all(usable.map(type => API.discover(type,genre[type],page)));
+    const results = responses.flatMap(r => r.results).sort((a,b) => (b.popularity||0)-(a.popularity||0));
+    return {results,hasMore:responses.some(r=>page < (r.total_pages||1))};
+  },
+
+  async loadGenres(append = false) {
+    const grid = document.getElementById('genreGrid');
+    const more = document.getElementById('genreMore');
+    const request = ++this.genreRequest;
+    if (!append) {this.genrePage = 1; UI.setLoading(grid);}
+    more.hidden = true;
+    document.getElementById('genreResultsTitle').textContent = this.selectedGenre === 'All genres' ? 'Popular picks' : `${this.selectedGenre} ${this.activeTab === 'movie' ? 'movies' : this.activeTab === 'tv' ? 'TV shows' : 'movies & shows'}`;
+    document.getElementById('clearGenre').hidden = this.selectedGenre === 'All genres';
+    try {
+      const data = await this.genreData(this.selectedGenre,this.genrePage);
+      if (request !== this.genreRequest) return;
+      if (append) {
+        const existing = [...grid.querySelectorAll('.card')].map(card=>card.dataset.type+':'+card.dataset.id);
+        const unique = data.results.filter(item=>!existing.includes(item.media_type+':'+item.id));
+        const temp = document.createElement('div'); UI.renderCards(temp,unique);
+        grid.append(...temp.children);
+      } else UI.renderCards(grid,data.results);
+      more.hidden = !data.hasMore;
+    } catch(error) {if(request === this.genreRequest) UI.setError(grid,'Could not load this genre. Please try again.'); console.error(error);}
+  },
+
+  chooseGenre(name) {
+    this.selectedGenre = name;
+    document.querySelectorAll('.genre-chip').forEach(b=>{const active=b.dataset.genre===name;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
+    this.loadGenres();
+  },
+
+  setupGenres() {
+    const chips = document.getElementById('genreChips');
+    this.genreList.forEach(g=>{
+      const btn=document.createElement('button'); btn.type='button'; btn.className='genre-chip'; btn.textContent=g.name;btn.dataset.genre=g.name;
+      btn.addEventListener('click',()=>this.chooseGenre(g.name));chips.append(btn);
+    });
+    document.getElementById('clearGenre').addEventListener('click',()=>this.chooseGenre('All genres'));
+    document.getElementById('genreMore').addEventListener('click',()=>{this.genrePage++;this.loadGenres(true);});
+    this.chooseGenre('All genres');
+    this.loadCollections();
+  },
+
+  async loadCollections() {
+    const host=document.getElementById('curatedRows');
+    const collections=[{title:'Action-packed movies',type:'movie',genre:28},{title:'Comedy favorites',type:'movie',genre:35},{title:'Sci-Fi & fantasy series',type:'tv',genre:10765},{title:'Top drama series',type:'tv',genre:18}];
+    host.replaceChildren();
+    collections.forEach(async c=>{
+      const section=document.createElement('section');section.className='collection-row';
+      const title=document.createElement('h3');title.textContent=c.title;
+      const grid=document.createElement('div');grid.className='grid collection-grid';
+      section.append(title,grid);host.append(section);UI.setLoading(grid);
+      try {const data=await API.discover(c.type,c.genre);UI.renderCards(grid,data.results.slice(0,8));}
+      catch(error){console.error(error);UI.setError(grid,'Collection unavailable.');}
+    });
+  },
 
   // -----------------------------------------
   // EVENTS
@@ -489,7 +570,7 @@ const App = {
   init() {
 
     this.bindEvents();
-
+    this.setupGenres();
     this.loadTrending();
 
   },
