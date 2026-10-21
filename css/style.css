@@ -1497,3 +1497,26 @@ body[data-view="movie"] .hero h1,body[data-view="tv"] .hero h1{font-size:clamp(4
 .watch-selectors button{cursor:pointer}
 .watch-about p{color:#bbb;line-height:1.75;max-width:800px}
 @media(max-width:700px){.site-header{gap:14px;flex-wrap:wrap}.header-tabs{width:100%;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap}.nav-link{white-space:nowrap;padding:9px 11px}.watch-main{width:calc(100% - 28px);padding-top:25px}.watch-video{border-radius:9px}.watch-selectors select{max-width:170px}}
+
+/* Upcoming details dialog: centered in viewport, independent of page layout */
+.upcoming-dialog {
+  position: fixed !important;
+  inset: 0 !important;
+  margin: auto !important;
+  width: min(880px, calc(100vw - 40px)) !important;
+  max-width: calc(100vw - 40px) !important;
+  max-height: min(760px, calc(100dvh - 40px)) !important;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.upcoming-dialog:not([open]) { display: none; }
+.upcoming-dialog[open] { display: block; }
+@media (min-width: 760px) {
+  .upcoming-dialog #upcomingDialogBody { display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); min-height: 390px; }
+  .upcoming-dialog .dialog-art { height: 100%; min-height: 390px; }
+  .upcoming-dialog .dialog-content { padding: 48px 38px; align-self: center; }
+}
+@media (max-width: 759px) {
+  .upcoming-dialog { width: calc(100vw - 24px) !important; max-width: calc(100vw - 24px) !important; max-height: calc(100dvh - 24px) !important; }
+  .upcoming-dialog .dialog-art { height: clamp(175px, 42vw, 270px); }
+}
