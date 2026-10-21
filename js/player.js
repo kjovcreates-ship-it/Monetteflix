@@ -34,46 +34,9 @@ const Player = {
   // ==========================================
 
   async open(id, type, title, year) {
-    this.currentItem = {
-      id,
-      type,
-      title,
-      year
-    };
-
-    this.elements.title().textContent = title;
-
-    this.elements.meta().textContent =
-      `${type === 'tv' ? 'TV Series' : 'Movie'} · ${year || 'Unknown'}`;
-
-    this.elements.section().style.display = 'block';
-
-
-    // MOVIE
-    if (type === 'movie') {
-      this.elements.controls().classList.remove('visible');
-
-      this.elements.frame().src =
-        this.getMovieURL(id);
-    }
-
-
-    // TV SHOW
-    else {
-      this.elements.controls().classList.add('visible');
-
-      await this.loadSeasons(id);
-
-      this.updateFrame();
-    }
-
-
-    this.elements.section().scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
+    const params = new URLSearchParams({type: type === 'tv' ? 'tv' : 'movie', id: String(id)});
+    window.location.href = `watch.html?${params.toString()}`;
   },
-
 
   // ==========================================
   // CLOSE PLAYER
