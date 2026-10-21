@@ -9,3 +9,6 @@ Player is now ONLY on watch.html. Movie and TV cards navigate to watch.html?type
 All styling remains in css/style.css. TMDB metadata and CineSrc iframe URLs are preserved.
 
 External embeds may not always be available. TMDB token is exposed client-side in the original project; for a public service, use a backend proxy and restrict credentials.
+
+
+Red Edition: Netflix-inspired red/black styling added to the end of the single css/style.css file. Existing functionality and pages unchanged.
