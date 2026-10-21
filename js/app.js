@@ -7,6 +7,9 @@ const App = {
   activeTab: 'all',
 
   isSearching: false,
+  trendingRequest: 0,
+  searchRequest: 0,
+  upcomingDetailRequest: 0,
 
 
   // -----------------------------------------
@@ -16,9 +19,10 @@ const App = {
   async search(query) {
 
     query = query.trim();
+    const request = ++this.searchRequest;
 
 
-    if (!query || this.isSearching) {
+    if (!query) {
       return;
     }
 
@@ -106,6 +110,7 @@ const App = {
       );
 
 
+      if (request !== this.searchRequest) return;
       const safeQuery =
         UI.escapeHTML(query);
 
@@ -141,21 +146,17 @@ const App = {
       );
 
 
-      UI.setError(
-        grid,
-        'Search failed. Please try again.'
-      );
+      if (request === this.searchRequest) UI.setError(grid, 'Search failed. Please try again.');
 
     }
 
     finally {
 
-      this.isSearching = false;
-
-
-      button.disabled = false;
-
-      button.textContent = 'Search';
+      if (request === this.searchRequest) {
+        this.isSearching = false;
+        button.disabled = false;
+        button.textContent = 'Search';
+      }
 
     }
 
@@ -167,6 +168,7 @@ const App = {
   // -----------------------------------------
 
   async loadTrending() {
+    const request = ++this.trendingRequest;
 
     const grid =
       document.getElementById(
@@ -185,6 +187,7 @@ const App = {
         );
 
 
+      if (request !== this.trendingRequest) return;
       UI.renderCards(
         grid,
         results.slice(0, 20)
@@ -201,10 +204,8 @@ const App = {
       );
 
 
-      UI.setError(
-        grid,
-        'Trending titles could not be loaded.'
-      );
+      if (request === this.trendingRequest) UI.setError(grid, 'Trending titles could not be loaded.');
+      if (request === this.trendingRequest) this.renderFeatured([]);
 
     }
 
@@ -217,19 +218,34 @@ const App = {
   renderFeatured(items) {
     const el = document.getElementById('heroFeature');
     if (!el) return;
-    const item = items.find(i => i.backdrop_path && (i.title || i.name));
-    if (!item) return;
+    // Use the current page's media type; prefer backdrop artwork but accept posters.
+    const typeFilter = this.activeTab;
+    const candidates = (Array.isArray(items) ? items : []).filter(i =>
+      i && i.id && (i.title || i.name) &&
+      (typeFilter === 'all' || (i.media_type || (i.title ? 'movie' : 'tv')) === typeFilter)
+    );
+    const item = candidates.find(i => i.backdrop_path) || candidates.find(i => i.poster_path) || candidates[0];
+    if (!item) {
+      el.innerHTML = '<div class="feature-unavailable">Featured titles are unavailable right now.</div>';
+      return;
+    }
     const title = item.title || item.name;
     const year = (item.release_date || item.first_air_date || '').slice(0, 4);
     const type = item.media_type || (item.title ? 'movie' : 'tv');
+    const artwork = item.backdrop_path || item.poster_path;
+    const imageURL = artwork ? `https://image.tmdb.org/t/p/w1280${artwork}` : '';
     el.innerHTML = `
-      <div class="feature-image" style="background-image:linear-gradient(90deg,rgba(9,9,13,.12),rgba(9,9,13,.05)),url('https://image.tmdb.org/t/p/w1280${item.backdrop_path}')"></div>
+      ${imageURL ? '<div class="feature-image"></div>' : ''}
       <div class="feature-info">
-        <span class="feature-kicker">FEATURED TITLE</span>
+        <span class="feature-kicker">FEATURED ${type === 'tv' ? 'SERIES' : 'MOVIE'}</span>
         <h2>${UI.escapeHTML(title)}</h2>
-        <p>${year || 'Featured'} <span>·</span> ${type === 'tv' ? 'TV Series' : 'Movie'}</p>
-        <button class="feature-play" type="button">▶ &nbsp; Play title</button>
+        <p>${UI.escapeHTML(year || 'Featured')} <span>·</span> ${type === 'tv' ? 'TV Series' : 'Movie'}</p>
+        <button class="feature-play" type="button">▶ &nbsp; Watch now</button>
       </div>`;
+    if (imageURL) {
+      const image = el.querySelector('.feature-image');
+      image.style.backgroundImage = `url("${imageURL}")`;
+    }
     el.querySelector('.feature-play').addEventListener('click', () =>
       Player.open(item.id, type, title, year)
     );
@@ -309,6 +325,11 @@ const App = {
       );
 
 
+    ++this.searchRequest;
+    this.isSearching = false;
+    const searchButton = document.getElementById('searchBtn');
+    searchButton.disabled = false;
+    searchButton.textContent = 'Search';
     input.value = '';
 
 
@@ -466,6 +487,7 @@ const App = {
   },
 
   async openUpcomingDetails(item) {
+    const request = ++this.upcomingDetailRequest;
     const dialog = document.getElementById('upcomingDialog');
     const body = document.getElementById('upcomingDialogBody');
     const date = new Date(item.release_date+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
@@ -474,7 +496,7 @@ const App = {
     if (!dialog.open) dialog.showModal();
     try {
       const videos = await API.movieVideos(item.id);
-      if (!dialog.open || !body.querySelector('#upcomingTrailer')) return;
+      if (request !== this.upcomingDetailRequest || !dialog.open || !body.querySelector('#upcomingTrailer')) return;
       const trailer = videos.find(v=>v.site==='YouTube' && v.type==='Trailer' && v.official) || videos.find(v=>v.site==='YouTube' && v.type==='Trailer');
       if (trailer && /^[a-zA-Z0-9_-]{11}$/.test(trailer.key)) {
         const link = document.createElement('a'); link.className='trailer-link';link.href=`https://www.youtube.com/watch?v=${trailer.key}`;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Watch trailer ↗';body.querySelector('#upcomingTrailer').append(link);
@@ -488,8 +510,9 @@ const App = {
     document.getElementById('upcomingPrev').addEventListener('click',()=>{if(this.upcomingPage>1){this.upcomingPage--;this.loadUpcoming();document.getElementById('upcoming-section').scrollIntoView({behavior:'smooth'});}});
     document.getElementById('upcomingNext').addEventListener('click',()=>{this.upcomingPage++;this.loadUpcoming();document.getElementById('upcoming-section').scrollIntoView({behavior:'smooth'});});
     const dialog = document.getElementById('upcomingDialog');
-    document.getElementById('upcomingDialogClose').addEventListener('click',()=>dialog.close());
-    dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
+    document.getElementById('upcomingDialogClose').addEventListener('click',()=>{++this.upcomingDetailRequest;dialog.close();});
+    dialog.addEventListener('click',event=>{if(event.target===dialog){++this.upcomingDetailRequest;dialog.close();}});
+    if (document.body.dataset.view === 'upcoming' || location.pathname.endsWith('/upcoming.html')) this.upcomingExpanded = true;
     this.loadUpcoming();
   },
 
@@ -625,7 +648,8 @@ const App = {
     );
 
 
-    Player.bindEvents();
+    // The old inline player is retained for compatibility, but playback uses watch.html.
+    // Do not initialize hidden legacy controls.
 
   },
 
@@ -637,9 +661,10 @@ const App = {
   init() {
 
     this.bindEvents();
-    this.setupGenres();
+    const view = location.pathname.split('/').pop();
+    if (view !== 'upcoming.html') { this.setupGenres(); this.loadTrending(); }
+    else { this.setupGenres(); }
     this.setupUpcoming();
-    this.loadTrending();
 
   },
 
@@ -650,4 +675,7 @@ const App = {
 // START
 // =========================================
 
+const initialView = location.pathname.split('/').pop();
+if (initialView === 'movies.html') App.activeTab = 'movie';
+if (initialView === 'shows.html') App.activeTab = 'tv';
 App.init();

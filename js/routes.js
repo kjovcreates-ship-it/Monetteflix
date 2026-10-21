@@ -6,7 +6,7 @@
     if(a.dataset.view === view) a.setAttribute('aria-current','page');
   });
   if(view === 'movie' || view === 'tv') {
-    App.setTab(view);
+    // The initial page filter is set before App.init() to avoid competing requests.
     const title = document.querySelector('.hero h1');
     if(title) title.innerHTML = view === 'movie' ? 'Explore <em>movies.</em>' : 'Explore <em>TV shows.</em>';
     const note = document.querySelector('.hero-content > p');
