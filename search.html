@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080909">
+
+  <title>Search | Monetteflix</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Anton&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3KSWP404TP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-3KSWP404TP');
+  </script>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <a href="index.html" class="logo" id="homeLogo" aria-label="Monetteflix home">
+      MONETTE<span>FLIX</span>
+    </a>
+
+    <nav class="header-tabs" aria-label="Main navigation">
+      <a class="nav-link" href="index.html" data-view="home">Home</a>
+      <a class="nav-link" href="movies.html" data-view="movie">Movies</a>
+      <a class="nav-link" href="shows.html" data-view="tv">TV Shows</a>
+      <a class="nav-link" href="upcoming.html" data-view="upcoming">Coming Soon</a>
+    </nav>
+    <div class="legacy-tabs" hidden><button class="tab-btn active" data-tab="all">All</button><button class="tab-btn" data-tab="movie">Movies</button><button class="tab-btn" data-tab="tv">TV Shows</button><button id="upcomingTab" type="button">Coming Soon</button></div>
+  </header>
+
+
+  <main class="search-page-main">
+    <section class="search-page-header">
+      <div class="cinema-topline"><span>MONETTEFLIX / SEARCH</span><span>MOVIES &amp; TV SHOWS</span></div>
+      <span class="section-eyebrow">FIND SOMETHING TO WATCH</span>
+      <h1>SEARCH<span class="search-period">.</span></h1>
+      <form id="searchPageForm" class="search-page-form" role="search">
+        <input id="searchPageInput" type="search" name="q" placeholder="Search movies and TV shows..." autocomplete="off" aria-label="Search movies and TV shows" required>
+        <button type="submit">SEARCH</button>
+      </form>
+      <p id="searchStatus" class="search-status" role="status" aria-live="polite">Enter a title to find movies and TV shows.</p>
+    </section>
+    <section class="search-page-results" aria-label="Search results">
+      <div class="section-heading"><div><span class="section-eyebrow">BROWSE TITLES</span><h2 id="searchResultsHeading">RESULTS</h2></div></div>
+      <div id="searchPageGrid" class="cards-grid"></div>
+    </section>
+  </main>
+  <footer>
+
+    <div class="footer-logo">
+      MONETTE<span>FLIX</span>
+    </div>
+
+    <p>
+      Developed by
+      <a class="footer-name" href="https://kjovcreates.vercel.app/" target="_blank" rel="noopener noreferrer">kjov <span aria-hidden="true">↗</span></a>
+    </p>
+
+  </footer>
+
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/ui.js"></script>
+
+
+
+  <script src="js/search.js"></script>
+</body>
+</html>
