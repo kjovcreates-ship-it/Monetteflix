@@ -43,6 +43,7 @@
       <button class="tab-btn active" data-tab="all">All</button>
       <button class="tab-btn" data-tab="movie">Movies</button>
       <button class="tab-btn" data-tab="tv">TV Shows</button>
+      <button class="tab-btn upcoming-tab" id="upcomingTab" type="button">Coming Soon</button>
     </nav>
   </header>
 
@@ -58,15 +59,15 @@
 
       <div class="hero-content">
 
-        <div class="hero-eyebrow"><span class="live-dot"></span> MOVIES & TV SHOWS</div>
+        <div class="hero-eyebrow"><span class="live-dot"></span> CURATED FOR MOVIE LOVERS</div>
 
         <h1>
-          Stories worth<br>
-          <em>watching.</em>
+          Your next favorite<br>
+          <em>starts here.</em>
         </h1>
 
         <p>
-          Discover films and series, explore every genre, and find something great to watch.
+          Explore standout films, acclaimed series, and everything worth watching next.
         </p>
 
         <div class="search-wrap">
@@ -112,13 +113,28 @@
 
         </div>
 
-        <div class="hero-note"><span class="hero-note-line"></span> A BETTER WAY TO BROWSE <span class="hero-note-line"></span></div>
+        <div class="hero-note"><span class="hero-note-line"></span> EXPLORE THE COLLECTION <span class="hero-note-line"></span></div>
       </div>
       <div class="hero-feature" id="heroFeature" aria-label="Featured title">
         <div class="feature-placeholder"><span>MONETTE<span class="feature-red">FLIX</span></span><small>MOVIES & TV SHOWS</small></div>
       </div>
     </section>
 
+
+    <!-- UPCOMING MOVIES -->
+    <section class="discovery-section upcoming-section" id="upcoming-section">
+      <div class="section-heading upcoming-heading">
+        <div><span class="section-eyebrow">ON THE HORIZON</span><h2>Coming soon<span class="heading-period">.</span></h2><p class="section-description">A look at movies heading to theaters. Release dates may vary by region.</p></div>
+        <button class="section-link" id="upcomingMore" type="button">Explore upcoming <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="grid upcoming-grid" id="upcomingGrid" aria-live="polite"><div class="spinner"></div></div>
+      <div class="upcoming-pagination" id="upcomingPagination" hidden><button id="upcomingPrev" type="button">← Previous</button><span id="upcomingPageLabel"></span><button id="upcomingNext" type="button">Next →</button></div>
+    </section>
+
+    <dialog class="upcoming-dialog" id="upcomingDialog" aria-labelledby="upcomingDialogTitle">
+      <button class="dialog-close" id="upcomingDialogClose" type="button" aria-label="Close details">×</button>
+      <div id="upcomingDialogBody"></div>
+    </dialog>
 
     <!-- GENRE DISCOVERY -->
     <section id="genres-section" class="discovery-section">
