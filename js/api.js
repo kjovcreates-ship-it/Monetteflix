@@ -103,6 +103,18 @@ const API = {
     return { ...data, results:(data.results || []).map(item => ({...item,media_type:type})) };
   },
 
+  // Upcoming theatrical movies, using TMDB's upcoming endpoint.
+  async upcoming(page = 1) {
+    const data = await this.fetch(`/movie/upcoming?language=en-US&region=US&page=${encodeURIComponent(page)}`);
+    const today = new Date().toISOString().slice(0,10);
+    return { ...data, results:(data.results || []).filter(item => item.release_date && item.release_date >= today).sort((x,y)=>x.release_date.localeCompare(y.release_date)).map(item=>({...item,media_type:'movie'})) };
+  },
+
+  async movieVideos(id) {
+    const data = await this.fetch(`/movie/${encodeURIComponent(id)}/videos?language=en-US`);
+    return data.results || [];
+  },
+
   // -----------------------------------------
   // TV DETAILS
   // -----------------------------------------

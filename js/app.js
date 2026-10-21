@@ -426,6 +426,73 @@ const App = {
     });
   },
 
+  upcomingPage: 1,
+  upcomingExpanded: false,
+  upcomingRequest: 0,
+
+  async loadUpcoming() {
+    const grid = document.getElementById('upcomingGrid');
+    const pager = document.getElementById('upcomingPagination');
+    const request = ++this.upcomingRequest;
+    UI.setLoading(grid);
+    try {
+      const data = await API.upcoming(this.upcomingPage);
+      if (request !== this.upcomingRequest) return;
+      const items = this.upcomingExpanded ? data.results : data.results.slice(0, 6);
+      if (!items.length) { UI.setError(grid, 'No upcoming titles found for this page.'); }
+      else {
+        grid.innerHTML = items.map(item => {
+          const title = UI.escapeHTML(item.title || 'Untitled');
+          const date = new Date(item.release_date + 'T12:00:00');
+          const days = Math.max(0, Math.ceil((date - new Date()) / 86400000));
+          const formatted = date.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+          const poster = item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : '';
+          return `<button type="button" class="upcoming-card" data-id="${item.id}" aria-label="View details for ${title}">
+            <div class="upcoming-poster">${poster ? `<img src="${poster}" alt="" loading="lazy">` : '<span class="poster-fallback">MONETTEFLIX</span>'}<span class="coming-label">COMING SOON</span></div>
+            <span class="upcoming-title">${title}</span><span class="upcoming-date">${formatted} <span class="date-separator">·</span> ${days === 0 ? 'Releases today' : `${days} days to go`}</span>
+          </button>`;
+        }).join('');
+        grid.querySelectorAll('.upcoming-card').forEach(card => card.addEventListener('click', () => {
+          const item = items.find(i => String(i.id) === card.dataset.id);
+          if (item) this.openUpcomingDetails(item);
+        }));
+      }
+      pager.hidden = !this.upcomingExpanded;
+      document.getElementById('upcomingPrev').disabled = this.upcomingPage <= 1;
+      document.getElementById('upcomingNext').disabled = this.upcomingPage >= Math.min(data.total_pages || 1, 500);
+      document.getElementById('upcomingPageLabel').textContent = `Page ${this.upcomingPage}`;
+      document.getElementById('upcomingMore').textContent = this.upcomingExpanded ? 'Show less ↑' : 'Explore upcoming ↗';
+    } catch(err) { console.error('Upcoming failed:',err); if(request === this.upcomingRequest) UI.setError(grid,'Could not load upcoming movies. Please try again.'); }
+  },
+
+  async openUpcomingDetails(item) {
+    const dialog = document.getElementById('upcomingDialog');
+    const body = document.getElementById('upcomingDialogBody');
+    const date = new Date(item.release_date+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+    const poster = item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : '';
+    body.innerHTML = `<div class="dialog-art" ${poster ? `style="background-image:url('${poster}')"` : ''}></div><div class="dialog-content"><span class="section-eyebrow">COMING SOON · ${date}</span><h2 id="upcomingDialogTitle">${UI.escapeHTML(item.title || 'Upcoming movie')}</h2><p>${UI.escapeHTML(item.overview || 'More details will be available closer to release.')}</p><div id="upcomingTrailer"></div><p class="dialog-disclaimer">Theatrical release dates may vary by region. Streaming availability is not guaranteed.</p></div>`;
+    if (!dialog.open) dialog.showModal();
+    try {
+      const videos = await API.movieVideos(item.id);
+      if (!dialog.open || !body.querySelector('#upcomingTrailer')) return;
+      const trailer = videos.find(v=>v.site==='YouTube' && v.type==='Trailer' && v.official) || videos.find(v=>v.site==='YouTube' && v.type==='Trailer');
+      if (trailer && /^[a-zA-Z0-9_-]{11}$/.test(trailer.key)) {
+        const link = document.createElement('a'); link.className='trailer-link';link.href=`https://www.youtube.com/watch?v=${trailer.key}`;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Watch trailer ↗';body.querySelector('#upcomingTrailer').append(link);
+      }
+    } catch(error) { console.warn('Trailer unavailable:',error); }
+  },
+
+  setupUpcoming() {
+    document.getElementById('upcomingTab').addEventListener('click',()=>document.getElementById('upcoming-section').scrollIntoView({behavior:'smooth'}));
+    document.getElementById('upcomingMore').addEventListener('click',()=>{this.upcomingExpanded=!this.upcomingExpanded;this.upcomingPage=1;this.loadUpcoming();});
+    document.getElementById('upcomingPrev').addEventListener('click',()=>{if(this.upcomingPage>1){this.upcomingPage--;this.loadUpcoming();document.getElementById('upcoming-section').scrollIntoView({behavior:'smooth'});}});
+    document.getElementById('upcomingNext').addEventListener('click',()=>{this.upcomingPage++;this.loadUpcoming();document.getElementById('upcoming-section').scrollIntoView({behavior:'smooth'});});
+    const dialog = document.getElementById('upcomingDialog');
+    document.getElementById('upcomingDialogClose').addEventListener('click',()=>dialog.close());
+    dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close();});
+    this.loadUpcoming();
+  },
+
   // -----------------------------------------
   // EVENTS
   // -----------------------------------------
@@ -571,6 +638,7 @@ const App = {
 
     this.bindEvents();
     this.setupGenres();
+    this.setupUpcoming();
     this.loadTrending();
 
   },
