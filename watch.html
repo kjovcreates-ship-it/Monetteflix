@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080909">
+
+  <title>MonetteFlix</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-3KSWP404TP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-3KSWP404TP');
+  </script>
+</head><body class="watch-page">
+<header class="site-header"><a href="index.html" class="logo">Monette<span>Flix</span></a><nav class="header-tabs" aria-label="Main navigation"><a class="nav-link" href="index.html">Home</a><a class="nav-link" href="movies.html">Movies</a><a class="nav-link" href="shows.html">TV Shows</a><a class="nav-link" href="upcoming.html">Coming Soon</a></nav></header>
+<main class="watch-main"><a href="index.html" id="watchBack" class="watch-back">← Back to browsing</a>
+<div class="watch-heading"><span class="section-eyebrow">NOW WATCHING</span><h1 id="watchTitle">Loading title…</h1><p id="watchMeta" class="watch-meta"></p></div>
+<div class="watch-video"><iframe id="watchFrame" title="Video player" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+<div id="watchStatus" role="status" class="watch-status">Loading title details…</div>
+<section class="watch-episodes" id="watchEpisodes" hidden><h2>Episodes</h2><div class="watch-selectors"><label>Season <select id="watchSeason"></select></label><label>Episode <select id="watchEpisode"></select></label><button type="button" id="watchPrev">← Previous</button><button type="button" id="watchNext">Next →</button></div></section>
+<section class="watch-about"><h2>About this title</h2><p id="watchOverview"></p></section>
+<section class="watch-recommendations"><div class="section-heading"><div><span class="section-eyebrow">KEEP EXPLORING</span><h2>You might also like</h2></div></div><div class="grid" id="watchRecommendations"></div></section>
+</main><footer><div class="footer-logo">Monette<span>Flix</span></div><p>Developed by <a class="footer-name" href="https://kjovcreates.vercel.app/" target="_blank" rel="noopener noreferrer">kjov ↗</a></p></footer>
+<script src="js/config.js"></script><script src="js/api.js"></script><script src="js/player.js"></script><script src="js/ui.js"></script><script src="js/watch.js"></script>
+</body></html>

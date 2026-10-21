@@ -1,19 +1,11 @@
-# Monetteflix
+MonetteFlix multipage edition
 
-Minimal cinematic streaming catalog. TMDB powers search, genre browsing, featured titles and upcoming movie listings. CineSrc is configured for movie and TV iframe playback (availability depends on the external provider).
+Upload ALL files in this folder to the root of your repository.
 
-## Deploy
-Upload the contents of this folder to your existing GitHub/Vercel project. The site is static and needs no build step.
+Pages: index.html (home), movies.html, shows.html, upcoming.html, watch.html.
 
-## Coming Soon
-The Coming Soon section pulls TMDB's upcoming US theatrical release list and shows dates, approximate countdowns and YouTube trailer links when TMDB lists one. Release dates and streaming availability can differ by country/provider. Upcoming titles open an information dialog, not the video player.
+Player is now ONLY on watch.html. Movie and TV cards navigate to watch.html?type=movie&id=... or ?type=tv&id=... .
 
-## Files
-- `css/style.css` — all styles (single CSS file)
-- `js/config.js` — TMDB configuration (existing client-side token)
-- `js/api.js` — TMDB endpoints
-- `js/app.js` — browse, search, collections, upcoming
-- `js/ui.js` — title cards
-- `js/player.js` — CineSrc movie/TV embeds
+All styling remains in css/style.css. TMDB metadata and CineSrc iframe URLs are preserved.
 
-The TMDB token remains in the browser-accessible config file, as in the original project. For a public or higher-traffic site, consider moving API requests to a server-side proxy and applying rate limits.
+External embeds may not always be available. TMDB token is exposed client-side in the original project; for a public service, use a backend proxy and restrict credentials.

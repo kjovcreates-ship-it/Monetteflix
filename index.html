@@ -35,16 +35,17 @@
 
   <!-- HEADER -->
   <header class="site-header">
-    <a href="#" class="logo" id="homeLogo" aria-label="MonetteFlix home">
+    <a href="index.html" class="logo" id="homeLogo" aria-label="MonetteFlix home">
       Monette<span>Flix</span>
     </a>
 
-    <nav class="header-tabs" aria-label="Content filters">
-      <button class="tab-btn active" data-tab="all">All</button>
-      <button class="tab-btn" data-tab="movie">Movies</button>
-      <button class="tab-btn" data-tab="tv">TV Shows</button>
-      <button class="tab-btn upcoming-tab" id="upcomingTab" type="button">Coming Soon</button>
+    <nav class="header-tabs" aria-label="Main navigation">
+      <a class="nav-link" href="index.html" data-view="home">Home</a>
+      <a class="nav-link" href="movies.html" data-view="movie">Movies</a>
+      <a class="nav-link" href="shows.html" data-view="tv">TV Shows</a>
+      <a class="nav-link" href="upcoming.html" data-view="upcoming">Coming Soon</a>
     </nav>
+    <div class="legacy-tabs" hidden><button class="tab-btn active" data-tab="all">All</button><button class="tab-btn" data-tab="movie">Movies</button><button class="tab-btn" data-tab="tv">TV Shows</button><button id="upcomingTab" type="button">Coming Soon</button></div>
   </header>
 
 
@@ -151,8 +152,8 @@
       <div id="curatedRows"></div>
     </section>
 
-    <!-- PLAYER -->
-    <section id="player-section">
+    <!-- Legacy player controls retained for compatibility; viewing happens on watch.html -->
+    <section id="player-section" hidden aria-hidden="true">
 
       <div class="player-header">
 
@@ -291,6 +292,7 @@
   <script src="js/player.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/app.js"></script>
+  <script src="js/routes.js"></script>
 
 </body>
 </html>
