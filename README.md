@@ -1,5 +1,3 @@
-MONETTEFLIX — THE BOOTLEG CINEMA
+Monetteflix — updated wording
 
-A distinct red/black/cream editorial cinema design. Five HTML pages, one css/style.css file, and original TMDB / CineSrc integrations retained.
-
-Deploy: upload all files and folders to the repository root. Test TMDB and player in browser.
+Same design and functionality as the Bootleg Cinema edition, with straightforward movie and TV labels and descriptions.
