@@ -225,10 +225,10 @@ const App = {
     el.innerHTML = `
       <div class="feature-image" style="background-image:linear-gradient(90deg,rgba(9,9,13,.12),rgba(9,9,13,.05)),url('https://image.tmdb.org/t/p/w1280${item.backdrop_path}')"></div>
       <div class="feature-info">
-        <span class="feature-kicker">✦ IN THE SPOTLIGHT</span>
+        <span class="feature-kicker">FEATURED TITLE</span>
         <h2>${UI.escapeHTML(title)}</h2>
         <p>${year || 'Featured'} <span>·</span> ${type === 'tv' ? 'TV Series' : 'Movie'}</p>
-        <button class="feature-play" type="button">▶ &nbsp; Watch now</button>
+        <button class="feature-play" type="button">▶ &nbsp; Play title</button>
       </div>`;
     el.querySelector('.feature-play').addEventListener('click', () =>
       Player.open(item.id, type, title, year)
