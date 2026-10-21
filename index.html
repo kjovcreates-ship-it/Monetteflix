@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080909">
 
-  <title>MonetteFlix</title>
+  <title>Monetteflix</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Bebas+Neue&display=swap"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Anton&display=swap"
     rel="stylesheet"
   >
 
@@ -35,15 +35,15 @@
 
   <!-- HEADER -->
   <header class="site-header">
-    <a href="index.html" class="logo" id="homeLogo" aria-label="MonetteFlix home">
-      Monette<span>Flix</span>
+    <a href="index.html" class="logo" id="homeLogo" aria-label="Monetteflix home">
+      MONETTE<span>FLIX</span>
     </a>
 
     <nav class="header-tabs" aria-label="Main navigation">
-      <a class="nav-link" href="index.html" data-view="home">Home</a>
-      <a class="nav-link" href="movies.html" data-view="movie">Movies</a>
-      <a class="nav-link" href="shows.html" data-view="tv">TV Shows</a>
-      <a class="nav-link" href="upcoming.html" data-view="upcoming">Coming Soon</a>
+      <a class="nav-link" href="index.html" data-view="home">The Lobby</a>
+      <a class="nav-link" href="movies.html" data-view="movie">Films</a>
+      <a class="nav-link" href="shows.html" data-view="tv">Series</a>
+      <a class="nav-link" href="upcoming.html" data-view="upcoming">Coming Attractions</a>
     </nav>
     <div class="legacy-tabs" hidden><button class="tab-btn active" data-tab="all">All</button><button class="tab-btn" data-tab="movie">Movies</button><button class="tab-btn" data-tab="tv">TV Shows</button><button id="upcomingTab" type="button">Coming Soon</button></div>
   </header>
@@ -52,97 +52,43 @@
   <main>
     <div class="ambient-light" aria-hidden="true"></div>
 
-    <!-- HERO -->
-    <section class="hero">
-
-      <div class="hero-glow hero-glow-one"></div>
-      <div class="hero-glow hero-glow-two"></div>
-
-      <div class="hero-content">
-
-        <div class="hero-eyebrow"><span class="live-dot"></span> CURATED FOR MOVIE LOVERS</div>
-
-        <h1>
-          Your next favorite<br>
-          <em>starts here.</em>
-        </h1>
-
-        <p>
-          Explore standout films, acclaimed series, and everything worth watching next.
-        </p>
-
-        <div class="search-wrap">
-
-          <div class="search-input-wrap">
-
-            <svg
-              class="search-icon"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <path
-                d="M21 21l-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-              />
-            </svg>
-
-            <input
-              type="search"
-              id="searchInput"
-              placeholder="Search movies or TV shows..."
-              autocomplete="off"
-              aria-label="Search movies or TV shows"
-            >
-
-            <button
-              id="clearSearch"
-              class="clear-search"
-              aria-label="Clear search"
-              type="button"
-            >
-              &times;
-            </button>
-
-          </div>
-
-          <button id="searchBtn" type="button">
-            Search
-          </button>
-
+    <!-- FEATURE PRESENTATION / THE BOOTLEG CINEMA -->
+    <section class="hero cinema-hero" aria-label="Featured presentation">
+      <div class="cinema-topline"><span>INDEPENDENT MOVIE HOUSE <b>·</b> EST. 2026</span><span>ISSUE NO. 001 / ALWAYS OPEN</span></div>
+      <div class="cinema-feature-layout">
+        <div class="cinema-intro">
+          <div class="cinema-stamp"><span class="stamp-star">✳</span> THE FEATURE PRESENTATION <span class="stamp-index">01 / 04</span></div>
+          <h1>GOOD MOVIES.<br><span>BAD HABITS.</span></h1>
+          <p>Something good is always playing. Browse the shelves, pick a title, and stay a while.</p>
+          <div class="search-wrap"><div class="search-input-wrap"><svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m16 16 5 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><input type="search" id="searchInput" placeholder="Find your next obsession..." autocomplete="off" aria-label="Search movies or TV shows"><button id="clearSearch" class="clear-search" aria-label="Clear search" type="button">×</button></div><button id="searchBtn" type="button">FIND IT ↗</button></div>
+          <div class="cinema-bottom-note"><span>NO ALGORITHMIC SMALL TALK.</span><span>JUST PRESS PLAY. ↗</span></div>
         </div>
-
-        <div class="hero-note"><span class="hero-note-line"></span> EXPLORE THE COLLECTION <span class="hero-note-line"></span></div>
+        <div class="cinema-feature-frame"><div class="cinema-frame-top"><span>NOW PROJECTING</span><span>● FEATURE 001</span></div><div class="hero-feature" id="heroFeature" aria-label="Featured title"><div class="feature-placeholder"><span>MONETTEFLIX</span><small>THE SHOW STARTS HERE</small></div></div><div class="cinema-frame-bottom"><span>THE HOUSE SELECTION</span><span>MONETTEFLIX © 2026</span></div></div>
       </div>
-      <div class="hero-feature" id="heroFeature" aria-label="Featured title">
-        <div class="feature-placeholder"><span>MONETTE<span class="feature-red">FLIX</span></span><small>MOVIES & TV SHOWS</small></div>
-      </div>
+      <div class="cinema-marquee" aria-hidden="true"><div>NOW SHOWING <span>✳</span> CULT FAVORITES <span>✳</span> LATE NIGHT WATCHES <span>✳</span> NO SKIPPING THE INTRO <span>✳</span> NOW SHOWING <span>✳</span></div></div>
     </section>
-
 
     <!-- UPCOMING MOVIES -->
     <section class="discovery-section upcoming-section" id="upcoming-section">
       <div class="section-heading upcoming-heading">
-        <div><span class="section-eyebrow">ON THE HORIZON</span><h2>Coming soon<span class="heading-period">.</span></h2><p class="section-description">A look at movies heading to theaters. Release dates may vary by region.</p></div>
-        <button class="section-link" id="upcomingMore" type="button">Explore upcoming <span aria-hidden="true">↗</span></button>
+        <div><span class="section-eyebrow">UP NEXT AT THE MOVIES</span><h2>COMING ATTRACTIONS</h2><p class="section-description">A look at movies heading to theaters. Release dates may vary by region.</p></div>
+        <button class="section-link" id="upcomingMore" type="button">See the lineup <span aria-hidden="true">↗</span></button>
       </div>
       <div class="grid upcoming-grid" id="upcomingGrid" aria-live="polite"><div class="spinner"></div></div>
       <div class="upcoming-pagination" id="upcomingPagination" hidden><button id="upcomingPrev" type="button">← Previous</button><span id="upcomingPageLabel"></span><button id="upcomingNext" type="button">Next →</button></div>
     </section>
 <!-- GENRE DISCOVERY -->
     <section id="genres-section" class="discovery-section">
-      <div class="section-heading"><div><span class="section-eyebrow">FIND YOUR GENRE</span><h2>Explore genres</h2></div></div>
+      <div class="section-heading"><div><span class="section-eyebrow">THE GENRE AISLE</span><h2>PICK YOUR POISON</h2></div></div>
       <div class="genre-chips" id="genreChips" aria-label="Filter by genre"></div>
-      <div class="genre-results-head"><h3 id="genreResultsTitle">Popular picks</h3><button id="clearGenre" type="button" hidden>Clear genre ×</button></div>
+      <div class="genre-results-head"><h3 id="genreResultsTitle">THE GOOD STUFF</h3><button id="clearGenre" type="button" hidden>Clear genre ×</button></div>
       <div class="grid" id="genreGrid" aria-live="polite"></div>
       <button class="load-more" id="genreMore" type="button" hidden>Load more</button>
     </section>
 
     <!-- CURATED ROWS -->
     <section class="discovery-section" id="curated-section">
-      <div class="section-heading"><div><span class="section-eyebrow">DISCOVER MORE</span><h2>Browse collections</h2></div></div>
+      <div class="section-heading"><div><span class="section-eyebrow">PULLED FROM THE SHELVES</span><h2>FRESH ON THE SHELF</h2></div></div>
       <div id="curatedRows"></div>
     </section>
 
@@ -182,7 +128,7 @@
         <iframe
           id="playerFrame"
           src=""
-          title="MonetteFlix video player"
+          title="Monetteflix video player"
           allowfullscreen
           allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
         ></iframe>
@@ -276,7 +222,7 @@
   <footer>
 
     <div class="footer-logo">
-      Monette<span>Flix</span>
+      MONETTE<span>FLIX</span>
     </div>
 
     <p>
